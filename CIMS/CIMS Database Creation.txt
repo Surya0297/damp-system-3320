@@ -1,0 +1,108 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 135
+Server version: 8.0.32 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use cims;
+Database changed
+mysql>  CREATE TABLE IF NOT EXISTS `cims`.`crime` (
+    ->        `id` INT NOT NULL AUTO_INCREMENT,
+    ->       `crimeId` VARCHAR(45) NOT NULL,
+    ->      `crimeType` VARCHAR(20) NOT NULL,
+    ->        `description` VARCHAR(250) NOT NULL,
+    ->        `psArea` VARCHAR(45) NOT NULL,
+    ->       `date` DATETIME NOT NULL,
+    ->        `victimName` VARCHAR(25) NOT NULL,
+    ->        `status` VARCHAR(45) NOT NULL DEFAULT 'unsolved',
+    ->        `isDelete` TINYINT NOT NULL DEFAULT 0,
+    ->       PRIMARY KEY (`id`),
+    ->        UNIQUE INDEX `crimeId_UNIQUE` (`crimeId` ASC) VISIBLE);
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> desc crime;
++-------------+--------------+------+-----+----------+----------------+
+| Field       | Type         | Null | Key | Default  | Extra          |
++-------------+--------------+------+-----+----------+----------------+
+| id          | int          | NO   | PRI | NULL     | auto_increment |
+| crimeId     | varchar(45)  | NO   | UNI | NULL     |                |
+| crimeType   | varchar(20)  | NO   |     | NULL     |                |
+| description | varchar(250) | NO   |     | NULL     |                |
+| psArea      | varchar(45)  | NO   |     | NULL     |                |
+| date        | datetime     | NO   |     | NULL     |                |
+| victimName  | varchar(25)  | NO   |     | NULL     |                |
+| status      | varchar(45)  | NO   |     | unsolved |                |
+| isDelete    | tinyint      | NO   |     | 0        |                |
++-------------+--------------+------+-----+----------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> CREATE TABLE IF NOT EXISTS `cims`.`criminal` (
+    ->        `id` INT NOT NULL AUTO_INCREMENT,
+    ->        `criminalId` VARCHAR(45) NOT NULL,
+    ->        `name` VARCHAR(45) NOT NULL,
+    ->        `dob` DATE NOT NULL,
+    ->        `gender` VARCHAR(10) NOT NULL,
+    ->        `identifyingMark` VARCHAR(45) NULL,
+    ->        `firstArrestDate` DATE NULL,
+    ->        `arrestedFromPsArea` VARCHAR(45) NULL,
+    ->        `isDelete` TINYINT NOT NULL DEFAULT 0,
+    ->        PRIMARY KEY (`id`),
+    ->        UNIQUE INDEX `criminalId_UNIQUE` (`criminalId` ASC) VISIBLE)
+    ->     ;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> desc criminal
+    -> desc criminal;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc criminal' at line 2
+mysql> desc criminal;
++--------------------+-------------+------+-----+---------+----------------+
+| Field              | Type        | Null | Key | Default | Extra          |
++--------------------+-------------+------+-----+---------+----------------+
+| id                 | int         | NO   | PRI | NULL    | auto_increment |
+| criminalId         | varchar(45) | NO   | UNI | NULL    |                |
+| name               | varchar(45) | NO   |     | NULL    |                |
+| dob                | date        | NO   |     | NULL    |                |
+| gender             | varchar(10) | NO   |     | NULL    |                |
+| identifyingMark    | varchar(45) | YES  |     | NULL    |                |
+| firstArrestDate    | date        | YES  |     | NULL    |                |
+| arrestedFromPsArea | varchar(45) | YES  |     | NULL    |                |
+| isDelete           | tinyint     | NO   |     | 0       |                |
++--------------------+-------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> CREATE TABLE IF NOT EXISTS `cims`.`crime_criminal` (
+    ->   `joinId` INT NOT NULL AUTO_INCREMENT,
+    ->   `crimeId` INT,
+    ->   `criminalId` INT,
+    ->   PRIMARY KEY (`joinId`),
+    ->   INDEX `criminal_crime_fk_idx` (`criminalId` ASC) VISIBLE,
+    ->   INDEX `crime_criminal_fk_idx` (`crimeId` ASC) VISIBLE,
+    ->   CONSTRAINT `crime_criminal_fk`
+    ->     FOREIGN KEY (`crimeId`)
+    ->     REFERENCES `cims`.`crime` (`id`)
+    ->     ON DELETE SET NULL,
+    ->   CONSTRAINT `criminal_crime_fk`
+    ->     FOREIGN KEY (`criminalId`)
+    ->     REFERENCES `cims`.`criminal` (`id`)
+    ->     ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> desc crime_criminal;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| joinId     | int  | NO   | PRI | NULL    | auto_increment |
+| crimeId    | int  | YES  | MUL | NULL    |                |
+| criminalId | int  | YES  | MUL | NULL    |                |
++------------+------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql>
