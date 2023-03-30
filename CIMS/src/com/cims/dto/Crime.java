@@ -1,5 +1,6 @@
 package com.cims.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface Crime {
@@ -48,12 +49,12 @@ public interface Crime {
 	 * return date of crime Area of the calling crime object
 	 * @return - The date and time of crime
 	 */
-	public LocalDateTime getDate() ;
+	public LocalDate getDate() ;
 	/**
 	 * Sets the date and time of the calling crime object
 	 * @param date - The date and time of crime 
 	 */
-	public void setDate(LocalDateTime date);
+	public void setDate(LocalDate date);
 	/**
 	 * return Name of Victim of calling crime object
 	 * @return - The Name of Victim 

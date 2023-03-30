@@ -13,6 +13,13 @@ public class CriminalImpl implements Criminal{
 	private LocalDate firstArrestDate;
 	private String arrestFromPsArea;
 	
+	
+	
+	public CriminalImpl(String name) {
+		super();
+		this.name = name;
+	}
+	
 	public CriminalImpl(String criminalId, String name, LocalDate dob, String gender, String identifyingMark,
 			LocalDate firstArrestDate, String arrestFromPsArea) {
 		super();
@@ -23,6 +30,9 @@ public class CriminalImpl implements Criminal{
 		IdentifyingMark = identifyingMark;
 		this.firstArrestDate = firstArrestDate;
 		this.arrestFromPsArea = arrestFromPsArea;
+	}
+	public CriminalImpl() {
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String getCriminalId() {
