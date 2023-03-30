@@ -1,5 +1,6 @@
 package com.cims.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CrimeImpl implements Crime {
@@ -8,11 +9,30 @@ public class CrimeImpl implements Crime {
 	private String crimeType;
 	private String description;
 	private String psArea;
-	private LocalDateTime date;
+	private LocalDate date;
 	private String victimName;
 	private String status;
+	private Criminal criminal;
 	
-	public CrimeImpl(String crimeId, String crimeType, String description, String psArea, LocalDateTime date,
+	public CrimeImpl() {
+		
+	}
+	
+	
+	public CrimeImpl(String crimeType, String description, String psArea, LocalDate date,
+			String victimName, String status, Criminal criminal) {
+		super();
+		this.crimeType = crimeType;
+		this.description = description;
+		this.psArea = psArea;
+		this.date = date;
+		this.victimName = victimName;
+		this.status = status;
+		this.criminal = criminal;
+	}
+
+
+	public CrimeImpl(String crimeId, String crimeType, String description, String psArea, LocalDate date,
 			String victimName, String status) {
 		super();
 		this.crimeId = crimeId;
@@ -56,11 +76,11 @@ public class CrimeImpl implements Crime {
 		this.psArea = psArea;
 	}
 	@Override
-	public LocalDateTime getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	@Override
-	public void setDate(LocalDateTime date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	@Override
