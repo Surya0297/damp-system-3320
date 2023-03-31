@@ -30,6 +30,19 @@ public class CrimeImpl implements Crime {
 		this.status = status;
 		this.criminal = criminal;
 	}
+	
+	
+
+	public CrimeImpl(String crimeId, String crimeType, String description, String psArea, LocalDate date,
+			String victimName) {
+		super();
+		this.crimeId = crimeId;
+		this.crimeType = crimeType;
+		this.description = description;
+		this.psArea = psArea;
+		this.date = date;
+		this.victimName = victimName;
+	}
 
 
 	public CrimeImpl(String crimeId, String crimeType, String description, String psArea, LocalDate date,

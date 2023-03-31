@@ -65,14 +65,14 @@ public class CrimeDaoImpl implements CrimeDao {
 		//if no category for given category id then this line will throw NoRecordFoundException
 		getCrimeById(crime.getCrimeId());
 		//you are here means category found for the given category id
-
+		
 		Connection connection = null;
 		try {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			
 			//prepare the query
-			String UPDATE_QUERY = "UPDATE crime SET crimeType = ?, description = ?, psArea = ?, date = ?, victimname = ? WHERE crimelId = ?";
+			String UPDATE_QUERY = "UPDATE crime SET crimeType = ?, description = ?, psArea = ?, date = ?, victimName = ? WHERE crimeId = ?";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
@@ -87,6 +87,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			
 			//execute query
 			ps.executeUpdate();
+			
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
 			throw new SomeThingWrongException();
@@ -180,7 +181,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "select c.crimeType, c.description, c.psArea, c.date, c.victimArea, c.status "
+			String SELECT_QUERY = "select c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status "
 					+ "ci.name from "
 					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId "
 					+ "and psArea = ? and c.isDelete !=1 "
@@ -197,6 +198,8 @@ public class CrimeDaoImpl implements CrimeDao {
 			
 			//execute query
 			ResultSet resultSet = ps.executeQuery();
+			
+			System.out.println("111111");
 			
 			//check if result set is empty
 			if(DBUtils.isResultSetEmpty(resultSet)) {
