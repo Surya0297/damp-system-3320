@@ -14,6 +14,7 @@ import com.cims.dto.Criminal;
 import com.cims.dto.CriminalImpl;
 import com.cims.exception.NoRecordFoundException;
 import com.cims.exception.SomeThingWrongException;
+import com.cims.ui.ConsoleColors;
 
 public class CriminalDaoImpl implements CriminalDao{
 	
@@ -69,7 +70,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			connection = DBUtils.connectToDatabase();
 			
 			//prepare the query
-			String UPDATE_QUERY = "UPDATE crimianl SET name = ?, dob = ?, gender = ?, identifyingMark = ?, firstArrestDate = ?, arrestedFromPsArea = ? WHERE criminalId = ? AND isDelete !=1";
+			String UPDATE_QUERY = "UPDATE criminal SET name = ?, dob = ?, gender = ?, identifyingMark = ?, firstArrestDate = ?, arrestedFromPsArea = ? WHERE criminalId = ? AND isDelete !=1";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
@@ -117,7 +118,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			
 			//check if result set is empty
 			if(DBUtils.isResultSetEmpty(resultSet)) {
-				throw new NoRecordFoundException("No Criminal Found for given id");
+				throw new NoRecordFoundException(ConsoleColors.ANSI_RED+"No Criminal Found for given id"+ConsoleColors.ANSI_RESET);
 			}
 			resultSet.next();
 			criminal = new CriminalImpl();
@@ -162,7 +163,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			ps.setString(2, criminalId);
 			
 			//execute query
-	        ps.executeQuery();
+	        ps.executeUpdate();
 			
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
@@ -185,16 +186,15 @@ public class CriminalDaoImpl implements CriminalDao{
 			//prepare the query
 			String DELETE_QUERY = "DELETE FROM crime_criminal WHERE crimeId= "
 					+ "(SELECT id FROM crime WHERE crimeId=?) AND  "
-					+ "criminalId= (SELECT id FROM criminal WHERE criminalId= ?";
+					+ "criminalId= (SELECT id FROM criminal WHERE criminalId= ?)";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(DELETE_QUERY);
 			ps.setString(1, crimeId);
 			ps.setString(2, criminalId);
-			
 			//execute query
 	        ps.executeUpdate();
-			
+	       
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
 			throw new SomeThingWrongException();
@@ -244,7 +244,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "SELECT * FROM criminal WHERE name like %?% AND isDelete !=1";
+			String SELECT_QUERY = "SELECT * FROM criminal WHERE name like '%?%' AND isDelete !=1";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(SELECT_QUERY);
@@ -252,7 +252,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			
 			//execute query
 			ResultSet resultSet = ps.executeQuery();
-			
+			System.out.println("11111");
 			//check if result set is empty
 			if(DBUtils.isResultSetEmpty(resultSet)) {
 				throw new NoRecordFoundException("No Criminal Found for given id");
