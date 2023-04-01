@@ -28,4 +28,6 @@ public interface CrimeDao {
 
 	public void updateStatus(String crimeId, String status) throws SomeThingWrongException, NoRecordFoundException;
 
+	List<Crime> getAllCrime() throws NoRecordFoundException, SomeThingWrongException;
+
 }

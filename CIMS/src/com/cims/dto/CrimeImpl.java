@@ -46,6 +46,20 @@ public class CrimeImpl implements Crime {
 
 
 	public CrimeImpl(String crimeId, String crimeType, String description, String psArea, LocalDate date,
+			String victimName, String status, Criminal criminal) {
+		super();
+		this.crimeId = crimeId;
+		this.crimeType = crimeType;
+		this.description = description;
+		this.psArea = psArea;
+		this.date = date;
+		this.victimName = victimName;
+		this.status = status;
+		this.criminal = criminal;
+	}
+
+
+	public CrimeImpl(String crimeId, String crimeType, String description, String psArea, LocalDate date,
 			String victimName, String status) {
 		super();
 		this.crimeId = crimeId;
@@ -114,10 +128,23 @@ public class CrimeImpl implements Crime {
 	}
 
 	@Override
+	public Criminal getCriminal() {
+		return criminal;
+	}
+
+	@Override
+	public void setCriminal(Criminal criminal) {
+		this.criminal = criminal;
+	}
+
+
+	@Override
 	public String toString() {
 		return "CrimeImpl [crimeId=" + crimeId + ", crimeType=" + crimeType + ", description=" + description
-				+ ", psArea=" + psArea + ", date=" + date + ", victimName=" + victimName + ", status=" + status + "]";
+				+ ", psArea=" + psArea + ", date=" + date + ", victimName=" + victimName + ", status=" + status
+				+ ", criminal=" + criminal + "]";
 	}
+
 	
 	
 	

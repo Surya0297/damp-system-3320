@@ -15,6 +15,8 @@ public class CriminalImpl implements Criminal{
 	
 	
 	
+
+
 	public CriminalImpl(String name) {
 		super();
 		this.name = name;
