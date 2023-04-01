@@ -2,6 +2,7 @@ package com.cims.ui;
 
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 import com.cims.dao.CrimeDao;
@@ -12,6 +13,7 @@ import com.cims.dto.Crime;
 import com.cims.dto.CrimeImpl;
 import com.cims.dto.Criminal;
 import com.cims.dto.CriminalImpl;
+import com.cims.exception.CanNotMap;
 import com.cims.exception.NoRecordFoundException;
 import com.cims.exception.SomeThingWrongException;
 
@@ -28,27 +30,29 @@ public class CriminalUi {
 	
 	public void addCriminal() {
 		
-		System.out.print("Enter Criminal ID: ");
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal ID: "+ConsoleColors.GREEN_BOLD);
 		String criminalId = sc.next();
-		System.out.print("Enter Criminal Name: ");
-		String name = sc.next();
-		System.out.print("Enter Criminal DOB: ");
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal Name: "+ConsoleColors.GREEN_BOLD);
+		sc.nextLine();
+		String name = sc.nextLine();
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal DOB: "+ConsoleColors.GREEN_BOLD);
 		LocalDate dob = LocalDate.parse(sc.next());
-		System.out.print("Enter Criminal Gender: ");
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal Gender: "+ConsoleColors.GREEN_BOLD);
 		String gender=sc.next();
-		System.out.print("Enter Criminal identification Mark: ");
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal identification Mark: "+ConsoleColors.GREEN_BOLD);
 		sc.nextLine();
 		String identifyingMark=sc.nextLine();
-		System.out.print("Enter First Arrest Date: ");
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter First Arrest Date: "+ConsoleColors.GREEN_BOLD);
 		LocalDate firstArrestDate=LocalDate.parse(sc.next());
-		System.out.print("Enter Police Station: ");
-		String arrestedFromPsArea=sc.next();
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Police Station: "+ConsoleColors.GREEN_BOLD);
+		sc.nextLine();
+		String arrestedFromPsArea=sc.nextLine();
 		
 		Criminal criminal = new CriminalImpl(criminalId, name, dob, gender, identifyingMark, firstArrestDate, arrestedFromPsArea);
 		
 		try {
 			criminalDao.addCriminal(criminal);
-			System.out.println(ConsoleColors.ANSI_GREEN+"CRIME ADDED 📤 TO DATABASE"+ConsoleColors.ANSI_RESET);
+			System.out.println(ConsoleColors.ANSI_GREEN+"CRIMINAL ADDED 📤 TO DATABASE"+ConsoleColors.ANSI_RESET);
 		} catch (FileNotFoundException | SomeThingWrongException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -60,7 +64,8 @@ public class CriminalUi {
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal ID: "+ConsoleColors.GREEN_BOLD);
 		String criminalId = sc.next();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal Name: "+ConsoleColors.GREEN_BOLD);
-		String name = sc.next();
+		sc.nextLine();
+		String name = sc.nextLine();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal DOB: "+ConsoleColors.GREEN_BOLD);
 		LocalDate dob = LocalDate.parse(sc.next());
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Criminal Gender: "+ConsoleColors.GREEN_BOLD);
@@ -71,7 +76,8 @@ public class CriminalUi {
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter First Arrest Date: "+ConsoleColors.GREEN_BOLD);
 		LocalDate firstArrestDate=LocalDate.parse(sc.next());
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Police Station: "+ConsoleColors.GREEN_BOLD);
-		String arrestedFromPsArea=sc.next();
+		sc.nextLine();
+		String arrestedFromPsArea=sc.nextLine();
 		
 		Criminal criminal = new CriminalImpl(criminalId, name, dob, gender, identifyingMark, firstArrestDate, arrestedFromPsArea);
 		
@@ -94,7 +100,12 @@ public class CriminalUi {
 		String crimeId = sc.next();
 		
 		try {
-			criminalDao.assignCriminalToCrime(crimeId, criminalId);
+			try {
+				criminalDao.assignCriminalToCrime(crimeId, criminalId);
+			} catch (CanNotMap e) {
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+			}
 			System.out.println(ConsoleColors.ANSI_GREEN+"CRIMINAL MAPPED TO CRIME 📤 IN DATABASE"+ConsoleColors.ANSI_RESET);
 		} catch (SomeThingWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
@@ -142,8 +153,8 @@ public class CriminalUi {
 		String name = sc.next();
 		
 		try {
-			Criminal criminal=criminalDao.getCriminalByName(name);
-			System.out.println(criminal);
+			List<Criminal> list=criminalDao.getCriminalByName(name);
+			DisplayData.printInfo1(list);
 			
 		} catch (SomeThingWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
@@ -151,6 +162,9 @@ public class CriminalUi {
 		}
 		
 	}
+
+
+	
 
 
 	

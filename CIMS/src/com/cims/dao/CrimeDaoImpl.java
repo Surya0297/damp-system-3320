@@ -61,6 +61,52 @@ public class CrimeDaoImpl implements CrimeDao {
 		}
 	
 	@Override
+	public List<Crime> getAllCrime() throws NoRecordFoundException, SomeThingWrongException{
+		Connection connection = null;
+		List<Crime> list = null;
+		try {
+			//connect to database
+			connection = DBUtils.connectToDatabase();
+			//prepare the query
+			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status from crime c";
+			
+			//get the prepared statement object
+			PreparedStatement ps = connection.prepareStatement(SELECT_QUERY);
+			
+			//stuff query
+			
+			
+			//execute query
+			ResultSet resultSet = ps.executeQuery();
+			
+			
+			//check if result set is empty
+			if(DBUtils.isResultSetEmpty(resultSet)) {
+				throw new NoRecordFoundException("No Record Found");
+			}
+			list = new ArrayList<>();
+			while(resultSet.next()) {
+				list.add(new CrimeImpl(resultSet.getString("crimeId"),resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status")));
+			
+			}
+		}catch(SQLException sqlEx) {
+			//code to log the error in the file
+			throw new SomeThingWrongException();
+		}finally {
+			try {
+				//close the exception
+				DBUtils.closeConnection(connection);				
+			}catch(SQLException sqlEX) {
+				throw new SomeThingWrongException();
+			}
+		}
+		return list;
+	
+	}
+	
+	
+	
+	@Override
 	public void updateCrime(Crime crime) throws SomeThingWrongException, NoRecordFoundException {
 		//if no category for given category id then this line will throw NoRecordFoundException
 		getCrimeById(crime.getCrimeId());
@@ -109,7 +155,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "SELECT * FROM crime WHERE crimeId = ?";
+			String SELECT_QUERY = "SELECT * FROM crime WHERE crimeId = ? and isDelete !=1";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(SELECT_QUERY);
@@ -120,7 +166,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			
 			//check if result set is empty
 			if(DBUtils.isResultSetEmpty(resultSet)) {
-				throw new NoRecordFoundException("No Criminal Found for given id");
+				throw new NoRecordFoundException("No Crime Found for given id");
 			}
 			resultSet.next();
 			crime = new CrimeImpl();
@@ -181,8 +227,8 @@ public class CrimeDaoImpl implements CrimeDao {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "select c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status "
-					+ "ci.name from "
+			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status, "
+					+ "ci.criminalId, ci.name, ci.dob, ci.gender, ci.identifyingMark, ci.firstArrestDate, ci.arrestedFromPsArea from "
 					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId "
 					+ "and psArea = ? and c.isDelete !=1 "
 					+ "and date between ? and ? "
@@ -199,7 +245,6 @@ public class CrimeDaoImpl implements CrimeDao {
 			//execute query
 			ResultSet resultSet = ps.executeQuery();
 			
-			System.out.println("111111");
 			
 			//check if result set is empty
 			if(DBUtils.isResultSetEmpty(resultSet)) {
@@ -207,7 +252,8 @@ public class CrimeDaoImpl implements CrimeDao {
 			}
 			list = new ArrayList<>();
 			while(resultSet.next()) {
-				list.add(new CrimeImpl(resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("name"))));
+				list.add(new CrimeImpl(resultSet.getString("crimeId"),resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("criminalId"),resultSet.getString("name"),resultSet.getDate("dob").toLocalDate(),resultSet.getString("gender"),resultSet.getString("identifyingMark"),resultSet.getDate("firstArrestDate").toLocalDate(),resultSet.getString("arrestedFromPsArea"))));
+			
 			}
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
@@ -231,8 +277,8 @@ public class CrimeDaoImpl implements CrimeDao {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "select c.crimeType, c.description, c.psArea, c.date, c.victimArea, c.status "
-					+ "ci.name from "
+			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status, "
+					+ "ci.criminalId, ci.name, ci.dob, ci.gender, ci.identifyingMark, ci.firstArrestDate, ci.arrestedFromPsArea from "
 					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId "
 					+ "and crimeType = ? and c.isDelete !=1 "
 					+ "and date between ? and ? "
@@ -255,7 +301,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			}
 			list = new ArrayList<>();
 			while(resultSet.next()) {
-				list.add(new CrimeImpl(resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("name"))));
+				list.add(new CrimeImpl(resultSet.getString("crimeId"),resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("criminalId"),resultSet.getString("name"),resultSet.getDate("dob").toLocalDate(),resultSet.getString("gender"),resultSet.getString("identifyingMark"),resultSet.getDate("firstArrestDate").toLocalDate(),resultSet.getString("arrestedFromPsArea"))));
 			}
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
@@ -279,17 +325,16 @@ public class CrimeDaoImpl implements CrimeDao {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "select c.crimeType, c.description, c.psArea, c.date, c.victimArea, c.status "
-					+ "ci.name from "
-					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId  "
-					+ "and description like %?% and c.isDelete !=1 "
+			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status, "
+					+ "ci.criminalId, ci.name, ci.dob, ci.gender, ci.identifyingMark, ci.firstArrestDate, ci.arrestedFromPsArea from "
+					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId "
+					+ "and description like ? and c.isDelete !=1 "
 					+ "inner join criminal ci on cc.criminalId = ci.id and ci.isDelete !=1;";
-			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(SELECT_QUERY);
 			
 			//stuff query
-			ps.setString(1, description);
+			ps.setString(1, "%"+description+"%");
 			
 			//execute query
 			ResultSet resultSet = ps.executeQuery();
@@ -300,7 +345,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			}
 			list = new ArrayList<>();
 			while(resultSet.next()) {
-				list.add(new CrimeImpl(resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("name"))));
+				list.add(new CrimeImpl(resultSet.getString("crimeId"),resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("criminalId"),resultSet.getString("name"),resultSet.getDate("dob").toLocalDate(),resultSet.getString("gender"),resultSet.getString("identifyingMark"),resultSet.getDate("firstArrestDate").toLocalDate(),resultSet.getString("arrestedFromPsArea"))));
 			}
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
@@ -313,6 +358,7 @@ public class CrimeDaoImpl implements CrimeDao {
 				throw new SomeThingWrongException();
 			}
 		}
+		
 		return list;
 	
 	}
@@ -325,7 +371,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			connection = DBUtils.connectToDatabase();
 			
 			//prepare the query
-			String UPDATE_QUERY = "UPDATE crime SET status = ? WHERE crimelId = ?";
+			String UPDATE_QUERY = "UPDATE crime SET status = ? WHERE crimeId = ?";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
@@ -336,6 +382,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			
 			//execute query
 			ps.executeUpdate();
+			
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
 			throw new SomeThingWrongException();

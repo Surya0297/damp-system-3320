@@ -25,7 +25,8 @@ public class Main {
 			}
 			
 		}else {
-			System.out.println(" Invalid Username and Password");
+			System.out.println(ConsoleColors.ANSI_RED+" Invalid Username and Password");
+			System.out.println();
 		}
 	}
 	
@@ -35,7 +36,7 @@ public class Main {
 			MenuDisplay.publicMenu(sc);
 		} catch (SomeThingWrongException | NoRecordFoundException | InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		
 	}

@@ -89,11 +89,11 @@ public class CrimeUi {
 			System.out.println(ConsoleColors.GREEN_BOLD+"CRIME DELETED "+ConsoleColors.ANSI_RED +"❌"+ConsoleColors.GREEN_BOLD+" FROM DATABASE"+ConsoleColors.ANSI_RESET);
 		} catch (SomeThingWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
-	public void viewCrime() {
+	public void viewCrimeByArea() {
 		List<Crime> crimeList=new ArrayList<>();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Police Station Area: "+ConsoleColors.GREEN_BOLD);
 		String psArea = sc.next();
@@ -104,10 +104,76 @@ public class CrimeUi {
 		
 		try {
 			 crimeList=crimeDao.getCrimeByPsAreaAndDateRange(psArea, sd, ed);
-			 System.out.println(crimeList);
+			 DisplayData.printInfo(crimeList);
 		} catch (NoRecordFoundException | SomeThingWrongException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+		}
+		
+	}
+
+	public void searchCrime() {
+		// TODO Auto-generated method stub
+		List<Crime> crimeList=new ArrayList<>();
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Description of crime: "+ConsoleColors.GREEN_BOLD);
+		sc.nextLine();
+		String description = sc.nextLine();
+		
+		
+		try {
+			 crimeList=crimeDao.getCrimeByDescription(description);
+			 DisplayData.printInfo(crimeList);
+		} catch (NoRecordFoundException | SomeThingWrongException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+	}
+
+	public void viewCrimeByType() {
+		List<Crime> crimeList=new ArrayList<>();
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime Type: "+ConsoleColors.GREEN_BOLD);
+		String crimeType = sc.next();
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime Start Date: "+ConsoleColors.GREEN_BOLD);
+		LocalDate sd = LocalDate.parse(sc.next());
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime End Date: "+ConsoleColors.GREEN_BOLD);
+		LocalDate ed = LocalDate.parse(sc.next());
+		
+		try {
+			 crimeList=crimeDao.getCrimeByTypeAndDateRange(crimeType, sd, ed);
+			 DisplayData.printInfo(crimeList);
+		} catch (NoRecordFoundException | SomeThingWrongException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+		
+	}
+
+	public void updateCrimeStatus() {
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime ID: "+ConsoleColors.GREEN_BOLD);
+		String crimeId = sc.next();
+		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime Staus (solved / unsolved): "+ConsoleColors.GREEN_BOLD);
+		String status = sc.next();
+		
+		try {
+			crimeDao.updateStatus(crimeId,status);
+			System.out.println(ConsoleColors.GREEN_BOLD+"CRIME STATUS 📤 UPDATED IN DATABASE"+ConsoleColors.ANSI_RESET);
+
+		} catch (SomeThingWrongException | NoRecordFoundException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+	}
+
+	public void getAllCrime() {
+		List<Crime> crimeList=new ArrayList<>();
+		
+		
+		try {
+			 crimeList=crimeDao.getAllCrime();
+			 DisplayData.printCrimeData(crimeList);
+		} catch (NoRecordFoundException | SomeThingWrongException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
 		}
 		
 	}

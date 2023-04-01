@@ -75,4 +75,6 @@ public interface Crime {
 	 * @param status - The status Of Victim 
 	 */
 	public void setStatus(String status);
+	Criminal getCriminal();
+	void setCriminal(Criminal criminal);
 }

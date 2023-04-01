@@ -9,9 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cims.dto.Criminal;
 import com.cims.dto.CriminalImpl;
+import com.cims.exception.CanNotMap;
 import com.cims.exception.NoRecordFoundException;
 import com.cims.exception.SomeThingWrongException;
 import com.cims.ui.ConsoleColors;
@@ -19,8 +22,10 @@ import com.cims.ui.ConsoleColors;
 public class CriminalDaoImpl implements CriminalDao{
 	
 	@Override
-	public void addCriminal(Criminal criminal) throws FileNotFoundException, SomeThingWrongException{
-
+	public void addCriminal(Criminal criminal) throws  SomeThingWrongException{
+		
+		
+		
 		Connection connection = null;
 		try {
 			//connect to database
@@ -43,10 +48,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			//execute query
 			ps.executeUpdate();
 		}catch(SQLException sqlEx) {
-			//code to log the error in the file
-			PrintWriter pw = new PrintWriter(new FileOutputStream("log"));
-			pw.append(sqlEx.getMessage());
-			pw.close();
+			
 			throw new SomeThingWrongException();
 		}finally {
 			
@@ -143,7 +145,7 @@ public class CriminalDaoImpl implements CriminalDao{
 		return criminal;
 	}
 	@Override
-	public void assignCriminalToCrime(String crimeId,String criminalId) throws SomeThingWrongException, NoRecordFoundException{
+	public void assignCriminalToCrime(String crimeId,String criminalId) throws SomeThingWrongException, NoRecordFoundException, CanNotMap{
 		
 		getCriminalById(criminalId);
 		
@@ -155,7 +157,7 @@ public class CriminalDaoImpl implements CriminalDao{
 			String INSERT_QUERY = "INSERT INTO crime_criminal (crimeId, criminalId) values ("
 					+ "(select id from crime where crimeId=?),"
 					+ "(select id from criminal where criminalId= ?)"
-					+ ");";
+					+ ")";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
@@ -163,7 +165,10 @@ public class CriminalDaoImpl implements CriminalDao{
 			ps.setString(2, criminalId);
 			
 			//execute query
-	        ps.executeUpdate();
+	        if(ps.executeUpdate()==0) {
+	        	throw new CanNotMap("CANNOT MAPPED TO SAME CRIME AGAIN");
+	        }
+	       
 			
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
@@ -237,27 +242,31 @@ public class CriminalDaoImpl implements CriminalDao{
 		}
 	}
 	@Override
-	public Criminal getCriminalByName(String name) throws SomeThingWrongException, NoRecordFoundException {
+	public List<Criminal> getCriminalByName(String name) throws SomeThingWrongException, NoRecordFoundException {
 		Connection connection = null;
 		Criminal criminal = null;
+		List<Criminal> criminalList=new ArrayList<>();
 		try {
 			//connect to database
+			
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "SELECT * FROM criminal WHERE name like '%?%' AND isDelete !=1";
+			
+			String SELECT_QUERY = "SELECT * FROM criminal WHERE name like ? AND isDelete !=1";
 			
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(SELECT_QUERY);
-			ps.setString(1, name);
+			ps.setString(1, "%"+name+"%");
 			
 			//execute query
 			ResultSet resultSet = ps.executeQuery();
-			System.out.println("11111");
+			
 			//check if result set is empty
 			if(DBUtils.isResultSetEmpty(resultSet)) {
 				throw new NoRecordFoundException("No Criminal Found for given id");
 			}
-			resultSet.next();
+			
+			while(resultSet.next()) {
 			criminal = new CriminalImpl();
 			criminal.setCriminalId(resultSet.getString("criminalId"));
 			criminal.setName(resultSet.getString("name"));
@@ -266,6 +275,8 @@ public class CriminalDaoImpl implements CriminalDao{
 			criminal.setIdentifyingMark(resultSet.getString("identifyingMark"));
 			criminal.setFirstArrestDate(resultSet.getDate("firstArrestDate").toLocalDate());
 			criminal.setArrestFromPsArea(resultSet.getString("arrestedFromPsArea"));
+			criminalList.add(criminal);
+			}
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file
 			throw new SomeThingWrongException();
@@ -277,7 +288,7 @@ public class CriminalDaoImpl implements CriminalDao{
 				throw new SomeThingWrongException();
 			}
 		}
-		return criminal;
+		return criminalList;
 	}
 	
 	
