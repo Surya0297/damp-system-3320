@@ -142,7 +142,7 @@ public class CriminalUi {
 
 		} catch (SomeThingWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		
 	}
@@ -158,7 +158,7 @@ public class CriminalUi {
 			
 		} catch (SomeThingWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		
 	}

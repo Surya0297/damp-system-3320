@@ -230,7 +230,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status, "
 					+ "ci.criminalId, ci.name, ci.dob, ci.gender, ci.identifyingMark, ci.firstArrestDate, ci.arrestedFromPsArea from "
 					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId "
-					+ "and psArea = ? and c.isDelete !=1 "
+					+ "and psArea =? and c.isDelete !=1 "
 					+ "and date between ? and ? "
 					+ "inner join criminal ci on cc.criminalId = ci.id and ci.isDelete !=1;";
 			
@@ -325,11 +325,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			//connect to database
 			connection = DBUtils.connectToDatabase();
 			//prepare the query
-			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status, "
-					+ "ci.criminalId, ci.name, ci.dob, ci.gender, ci.identifyingMark, ci.firstArrestDate, ci.arrestedFromPsArea from "
-					+ "crime c inner join crime_criminal cc on c.id = cc.crimeId "
-					+ "and description like ? and c.isDelete !=1 "
-					+ "inner join criminal ci on cc.criminalId = ci.id and ci.isDelete !=1;";
+			String SELECT_QUERY = "select c.crimeId, c.crimeType, c.description, c.psArea, c.date, c.victimName, c.status from crime c where description like ?";
 			//get the prepared statement object
 			PreparedStatement ps = connection.prepareStatement(SELECT_QUERY);
 			
@@ -345,7 +341,7 @@ public class CrimeDaoImpl implements CrimeDao {
 			}
 			list = new ArrayList<>();
 			while(resultSet.next()) {
-				list.add(new CrimeImpl(resultSet.getString("crimeId"),resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status"), new CriminalImpl(resultSet.getString("criminalId"),resultSet.getString("name"),resultSet.getDate("dob").toLocalDate(),resultSet.getString("gender"),resultSet.getString("identifyingMark"),resultSet.getDate("firstArrestDate").toLocalDate(),resultSet.getString("arrestedFromPsArea"))));
+				list.add(new CrimeImpl(resultSet.getString("crimeId"),resultSet.getString("crimeType"), resultSet.getString("description"), resultSet.getString("psArea"), resultSet.getDate("date").toLocalDate(), resultSet.getString("victimName"), resultSet.getString("status")));
 			}
 		}catch(SQLException sqlEx) {
 			//code to log the error in the file

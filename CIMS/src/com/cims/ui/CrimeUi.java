@@ -33,7 +33,8 @@ public class CrimeUi {
 		sc.nextLine();
 		String description = sc.nextLine();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Police Station Area: "+ConsoleColors.GREEN_BOLD);
-		String psArea = sc.next();
+		
+		String psArea = sc.nextLine();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime Date: "+ConsoleColors.GREEN_BOLD);
 		LocalDate date = LocalDate.parse(sc.next());
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Victim Name: "+ConsoleColors.GREEN_BOLD);
@@ -61,7 +62,8 @@ public class CrimeUi {
 		sc.nextLine();
 		String description = sc.nextLine();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Police Station Area: "+ConsoleColors.GREEN_BOLD);
-		String psArea = sc.next();
+		
+		String psArea = sc.nextLine();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime Date: "+ConsoleColors.GREEN_BOLD);
 		LocalDate date = LocalDate.parse(sc.next());
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Victim Name: "+ConsoleColors.GREEN_BOLD);
@@ -96,7 +98,8 @@ public class CrimeUi {
 	public void viewCrimeByArea() {
 		List<Crime> crimeList=new ArrayList<>();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Police Station Area: "+ConsoleColors.GREEN_BOLD);
-		String psArea = sc.next();
+		sc.nextLine();
+		String psArea = sc.nextLine();
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime Start Date: "+ConsoleColors.GREEN_BOLD);
 		LocalDate sd = LocalDate.parse(sc.next());
 		System.out.print(ConsoleColors.YELLOW_BOLD+"Enter Crime End Date: "+ConsoleColors.GREEN_BOLD);
@@ -122,7 +125,7 @@ public class CrimeUi {
 		
 		try {
 			 crimeList=crimeDao.getCrimeByDescription(description);
-			 DisplayData.printInfo(crimeList);
+			 DisplayData.printCrimeData(crimeList);
 		} catch (NoRecordFoundException | SomeThingWrongException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
