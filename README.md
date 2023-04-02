@@ -36,7 +36,10 @@ Role of Public:<br>
 
 <h4>ER Diagram</h4>
 
-![image]("C:\Users\chauh\Desktop\E-R DIAGRAM.png")
+<p align="center">
+  <img src="https://github.com/Surya0297/damp-system-3320/blob/main/CIMS/ER%20Diagram/E-R%20DIAGRAM.png?raw=true" width="100%" title="hover text">
+</p>
+
 
 
 <h5>Thank you</h5>
