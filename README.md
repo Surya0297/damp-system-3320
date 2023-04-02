@@ -36,7 +36,10 @@ Role of Public:<br>
 
 <h4>ER Diagram</h4>
 
-![image]("C:\Users\chauh\Desktop\E-R DIAGRAM.png")
+<p align="center">
+  <img src="your_relative_path_here" width="350" title="hover text">
+</p>
+
 
 
 <h5>Thank you</h5>
