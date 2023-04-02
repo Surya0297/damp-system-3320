@@ -37,7 +37,7 @@ Role of Public:<br>
 <h4>ER Diagram</h4>
 
 <p align="center">
-  <img src="your_relative_path_here" width="350" title="hover text">
+  <img src="https://github.com/Surya0297/damp-system-3320/blob/main/CIMS/ER%20Diagram/E-R%20DIAGRAM.png?raw=true" width="350" title="hover text">
 </p>
 
 
